@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="OAuthStoreAbstract.class.php" server="www.ee.usp.br:2145" local="131161730843074309" remote="131122108800000000" Dst="1" />
+<file name="OAuthStore2Leg.php" server="www.ee.usp.br:2145" local="131161730843194480" remote="131122108800000000" Dst="1" />
+<file name="OAuthStoreMySQL.php" server="www.ee.usp.br:2145" local="131161730845740083" remote="131122108800000000" Dst="1" />
+<file name="OAuthStoreMySQLi.php" server="www.ee.usp.br:2145" local="131161730845970876" remote="131122108800000000" Dst="1" />
+<file name="OAuthStoreAnyMeta.php" server="www.ee.usp.br:2145" local="131161730846261636" remote="131122108800000000" Dst="1" />
+<file name="OAuthStoreOracle.php" server="www.ee.usp.br:2145" local="131161730848894143" remote="131122108800000000" Dst="1" />
+<file name="OAuthStorePDO.php" server="www.ee.usp.br:2145" local="131161730848979344" remote="131122108800000000" Dst="1" />
+<file name="OAuthStorePostgreSQL.php" server="www.ee.usp.br:2145" local="131161730849089650" remote="131122108800000000" Dst="1" />
+<file name="OAuthStoreSession.php" server="www.ee.usp.br:2145" local="131161730851340930" remote="131122108800000000" Dst="1" />
+<file name="OAuthStoreSQL.php" server="www.ee.usp.br:2145" local="131161730852309808" remote="131122108800000000" Dst="1" />
+</dwsync>
