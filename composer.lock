@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a72e1f917ea94540d9188dfe71ed011",
+    "content-hash": "59013cee27fb9ad5e21813e19c15ff34",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4979,6 +4979,49 @@
             "time": "2021-12-08T09:12:39+00:00"
         },
         {
+            "name": "uspdev/senhaunica",
+            "version": "1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/uspdev/senhaunica.git",
+                "reference": "5d0835aa53ed4fc52c405c548e96554184e2ba69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/uspdev/senhaunica/zipball/5d0835aa53ed4fc52c405c548e96554184e2ba69",
+                "reference": "5d0835aa53ed4fc52c405c548e96554184e2ba69",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3.0",
+                "zorrodg/oauth-php": "^0.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Uspdev\\Senhaunica\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Masaki",
+                    "email": "masaki.kawabata@gmail.com"
+                }
+            ],
+            "description": "Biblioteca para acesso à senha única",
+            "homepage": "https://github.com/uspdev/senhaunica",
+            "support": {
+                "issues": "https://github.com/uspdev/senhaunica/issues",
+                "source": "https://github.com/uspdev/senhaunica/tree/1.3.1"
+            },
+            "time": "2020-10-20T14:04:53+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v4.2.2",
             "source": {
@@ -5129,6 +5172,50 @@
                 }
             ],
             "time": "2022-01-24T18:55:24+00:00"
+        },
+        {
+            "name": "zorrodg/oauth-php",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zorrodg/mworell-oauth-php.git",
+                "reference": "d6d42ad5e8dca0cf79a66401b3f301ac76212301"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zorrodg/mworell-oauth-php/zipball/d6d42ad5e8dca0cf79a66401b3f301ac76212301",
+                "reference": "d6d42ad5e8dca0cf79a66401b3f301ac76212301",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth1": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Worrell",
+                    "email": "marcw@pobox.com"
+                },
+                {
+                    "name": "Andres Zorro",
+                    "email": "zorrodg@gmail.com"
+                }
+            ],
+            "description": "OAuth composer implementation from oauth-php library from Marc Worrell",
+            "support": {
+                "issues": "https://github.com/zorrodg/mworell-oauth-php/issues",
+                "source": "https://github.com/zorrodg/mworell-oauth-php/tree/master"
+            },
+            "time": "2014-05-09T01:25:34+00:00"
         }
     ],
     "packages-dev": [

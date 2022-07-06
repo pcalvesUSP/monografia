@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<dwsync>
-<file name="OAuthSignatureMethod.class.php" server="www.ee.usp.br:2145" local="131161730837477269" remote="131122108800000000" Dst="1" />
-<file name="OAuthSignatureMethod_HMAC_SHA1.php" server="www.ee.usp.br:2145" local="131161730838032157" remote="131122108800000000" Dst="1" />
-<file name="OAuthSignatureMethod_PLAINTEXT.php" server="www.ee.usp.br:2145" local="131161730839677601" remote="131122108800000000" Dst="1" />
-<file name="OAuthSignatureMethod_MD5.php" server="www.ee.usp.br:2145" local="131161730840244482" remote="131122108800000000" Dst="1" />
-<file name="OAuthSignatureMethod_RSA_SHA1.php" server="www.ee.usp.br:2145" local="131161730841816381" remote="131122108800000000" Dst="1" />
-</dwsync>
