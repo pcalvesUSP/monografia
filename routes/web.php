@@ -27,6 +27,10 @@ Route::get('/orientadores', function() {
     echo "área dos orientadores";
 })->name='orientadores';
 
+Route::prefix('/alunos')->group(function() {
+    Route::get('/cadastroTcc/{numUSP}', 'AlunosController@cadastroTcc')->name('alunos.cadastroTcc');
+});
+
 Route::get('/alunos', function() {
     echo "área dos alunos";
 })->name('alunos');
