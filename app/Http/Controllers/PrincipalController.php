@@ -10,13 +10,17 @@ use Illuminate\Support\Facades\Route;
 class PrincipalController extends Controller
 {
     
-    $this->dadosUsuario;
+    private $dadosUsuario;
 
     /**
      * Método Construtor
      */
     function __construct() {
-        $this->dadosUsuario = get_cookie("loginUSP");
+        $this->dadosUsuario = isset($_COOKIE["loginUSP"])? $_COOKIE["loginUSP"]:null;
+    }
+
+    static function getDadosUsuario() {
+        return isset($_COOKIE["loginUSP"])? $_COOKIE["loginUSP"]:null;
     }
 
     /**
@@ -35,9 +39,10 @@ class PrincipalController extends Controller
             $auth = new Senhaunica();
             $res = $auth->login();
 
-            setcookie("loginUSP",$result['body'],time()+3600,"/");
+            setcookie("loginUSP", json_encode($res), time()+3600);
+
         } 
-        this->accSystem();
+        $this->accSystem();
     }
     
     function loginExternal () {
@@ -50,54 +55,63 @@ class PrincipalController extends Controller
                            ,"emailAlternativoUsuario" => ""
                            ,"emailUspUsuario"         => ""
                            ,"numeroTelefoneFormatado" => "(11) 55555-5555"
-                           ,"wuserid"                 => rand(10100,99100);
-                           ,"vinculo"                 => array[]("tipoVinculo"        => "EXTERNO"
-                                                                ,"codigoSetor"        => "0"
-                                                                ,"nomeAbreviadoSetor" => "Prof. Ext"
-                                                                ,"nomeSetor"          => "Externo"
-                                                                ,"codigoUnidade"      => 7
-                                                                ,"siglaUnidade"       => "EE"
-                                                                ,"nomeUnidade"        => "Escola de Enfermagem"
-                                                                ,"nomeVinculo"        => "Externo"
-                                                                ,"nomeAbreviadoFuncao"=> "Orientador"
-                                                                ,"tipoFuncao"         => "Docente"
-                                                         )
+                           ,"wuserid"                 => 0
+                           ,"vinculo"                 => [0 => array("tipoVinculo"        => "EXTERNO"
+                                                                    ,"codigoSetor"        => "0"
+                                                                    ,"nomeAbreviadoSetor" => "Prof. Ext"
+                                                                    ,"nomeSetor"          => "Externo"
+                                                                    ,"codigoUnidade"      => 7
+                                                                    ,"siglaUnidade"       => "EE"
+                                                                    ,"nomeUnidade"        => "Escola de Enfermagem"
+                                                                    ,"nomeVinculo"        => "Externo"
+                                                                    ,"nomeAbreviadoFuncao"=> "Orientador"
+                                                                    ,"tipoFuncao"         => "Docente"
+                                                         )]
                       );
 
-            setcookie("loginUSP",$result,time()+3600,"/");
+            setcookie("loginUSP",json_encode($result),time()+3600,"/");
         }
-        this->accSystem();
+        $this->accSystem();
     }
 
     function accSystem () {
-        $this->dadosUsuario = get_cookie("loginUSP");
         if (empty($this->dadosUsuario)) {
-
-            print "<script>alert('Favor realizar login'); window.location.assign('http://www.ee.usp.br'); </script>";
-			return;
+            $this->dadosUsuario = isset($_COOKIE["loginUSP"])?$_COOKIE["loginUSP"]:null;
+        
+            //print "<script>alert('Favor realizar login'); window.location.assign('http://www.ee.usp.br'); </script>";
+			//return;
 
         }
+        
         //$usuario = json_decode($dadosUsuario);
-        $usuario = (object)$dadosUsuario;
+        $usuario = json_decode($this->dadosUsuario);
                 
         $vinculo = isset($usuario->vinculo)?$usuario->vinculo:array();
         $vinculo = (array)$vinculo;
 
         if (!count($vinculo)) {
-            $dadosVinculo = new StdClass;
+            print "<script>alert('Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
+            return;
+            /*$dadosVinculo = new StdClass;
             $dadosVinculo->tipoVinculo = "SERVIDOR";
             $dadosVinculo->codigoUnidade = 7;
             $dadosVinculo->siglaUnidade = "EE";
-            $vinculo[] = $dadosVinculo;
+            $vinculo[] = $dadosVinculo;*/
         }
-
+    
         foreach ( $vinculo as $valor ) {
             
-            if ($valor->tipoVinculo=="ALUNOGR")&&($valor->codigoUnidade==7) {
-                redirect()->route('alunos');
+            print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
+            return;
+            
+            // NÃO FUNCIONA - PESQUISAR: redirect()->route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario]);
+            //return;
+
+            if ( $valor->tipoVinculo == "ALUNOGR" && $valor->codigoUnidade == 7 ) {
+                print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
                 return;
             } else {
-                $query= $this->db->query("SELECT * FROM orientadores where id_orientador = ".$usuario->loginUsuario); // VERIFICA ORIENTADOR
+                /*$query= $this->db->query("SELECT * FROM orientadores where id_orientador = ".$usuario->loginUsuario); // VERIFICA ORIENTADOR
                 $results_array = $query->result();
 
                 if (!empty($results_array)) { 
@@ -107,12 +121,12 @@ class PrincipalController extends Controller
                     $results_array = $query->result();
                         
                     if (!empty($results_array)) redirect()->route('graduacao');
-                };
+                };*/
             }
         }
         
         if (empty($results_array)) {
-            print "<script>alert('Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.'); window.location.assign('http://www.ee.usp.br'); </script>";
+            print "<script>alert('Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
             return;
         }
     }
