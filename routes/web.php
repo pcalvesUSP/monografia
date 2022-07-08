@@ -17,16 +17,16 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-Route::get('/', 'PrincipalController@login');
+Route::get('/', 'PrincipalController@login')->name('login');
 
 Route::get('/graduacao', function() {
     echo "área da graduação";
-});
+})->name('graduacao');
 
 Route::get('/orientadores', function() {
     echo "área dos orientadores";
-});
+})->name='orientadores';
 
 Route::get('/alunos', function() {
     echo "área dos alunos";
-});
+})->name('alunos');
