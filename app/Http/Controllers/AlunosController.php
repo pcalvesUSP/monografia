@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 class AlunosController extends Controller
 {
     //
+    private $usuarioLogado;
     /**
      * Método Construtor
      */
     function __construct() {
-        $login = PrincipalController::getDadosUsuario();
-        if (empty($login)) {
+        $this->usuarioLogado = PrincipalController::getDadosUsuario();
+        if (empty($this->usuarioLogado)) {
             print "<script>alert('Favor realizar login'); window.location.assign('http://localhost:8000'); </script>";
 			return;
         }
+        $this->usuarioLogado = json_decode($this->usuarioLogado);
     }
 
     /** 
@@ -24,8 +26,15 @@ class AlunosController extends Controller
      */
     function cadastroTcc($numUSP) {
 
-        
+        /*if (!$this->usuarioLogado->vinculo->tipoVinculo == "ALUNOGR") {
+            unset($_COOKIE["loginUSP"]);
+            print "<script>alert('Favor realizar login'); window.location.assign('http://localhost:8000'); </script>";
+			return;
+        }*/
 
-        return view('alunos.cadastroTcc',['numUSP' => $numUSP]);
+        $parametros = ["numUSP" => $numUSP
+                      ,"nomeUsuario" => $this->usuarioLogado->nomeUsuario];
+
+        return view('alunos.cadastroTcc',$parametros);
     }
 }
