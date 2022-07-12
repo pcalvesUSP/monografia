@@ -23,6 +23,9 @@ class AlunosController extends Controller
      * @param numUSP número USP do aluno
      */
     function cadastroTcc($numUSP) {
+
+        
+
         return view('alunos.cadastroTcc',['numUSP' => $numUSP]);
     }
 }
