@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlunoModelsTable extends Migration
+class CreateAlunosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,14 @@ class CreateAlunoModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('aluno_models', function (Blueprint $table) {
-            $table->id();
+        Schema::create('alunos', function (Blueprint $table) {
+            $table->bigInteger('id');
             $table->timestamps();
+            $table->string('nome', 80);
+            $table->foreignId('monografia_id')->constrained();
+            
+            $table->primary('id');
+            $table->index(['id', 'monografia_id'])->unique();
         });
     }
 
@@ -26,6 +31,6 @@ class CreateAlunoModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('aluno_models');
+        Schema::dropIfExists('alunos');
     }
 }

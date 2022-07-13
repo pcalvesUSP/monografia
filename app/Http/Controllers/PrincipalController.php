@@ -16,11 +16,12 @@ class PrincipalController extends Controller
      * Método Construtor
      */
     function __construct() {
-        $this->dadosUsuario = isset($_COOKIE["loginUSP"])? $_COOKIE["loginUSP"]:null;
+        $this->dadosUsuario = PrincipalController::getDadosUsuario();
     }
 
     static function getDadosUsuario() {
-        return isset($_COOKIE["loginUSP"])? $_COOKIE["loginUSP"]:null;
+        $user = isset($_COOKIE["loginUSP"])? $_COOKIE["loginUSP"]:null;
+        return json_decode($user);
     }
 
     /**
@@ -84,12 +85,11 @@ class PrincipalController extends Controller
         }
         
         //$usuario = json_decode($dadosUsuario);
-        $usuario = json_decode($this->dadosUsuario);
+        $usuario = $this->dadosUsuario;
                 
-        $vinculo = isset($usuario->vinculo)?$usuario->vinculo:array();
-        $vinculo = (array)$vinculo;
-
-        if (!count($vinculo)) {
+        $vinculo = isset($usuario->vinculo)?$usuario->vinculo:null;
+        
+        if (empty($vinculo)) {
             print "<script>alert('1-Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
             return;
             /*$dadosVinculo = new StdClass;
@@ -99,7 +99,7 @@ class PrincipalController extends Controller
             $vinculo[] = $dadosVinculo;*/
         }
     
-        foreach ( $vinculo as $valor ) {
+        foreach ( (array)$vinculo as $valor ) {
             
             print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
             return;
@@ -107,7 +107,7 @@ class PrincipalController extends Controller
             // NÃO FUNCIONA - PESQUISAR: redirect()->route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario]);
             //return;
 
-            if ( $valor->tipoVinculo == "ALUNOGR" && $valor->codigoUnidade == 7 ) {
+            if ( $valor['tipoVinculo'] == "ALUNOGR" && $valor['codigoUnidade'] == 7 ) {
                 print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
                 return;
             } else {
@@ -129,5 +129,34 @@ class PrincipalController extends Controller
             print "<script>alert('Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
             return;
         }
+    }
+
+    /**
+     * Método que busca as permissões de alunos
+     * @param $tipoAcao Ação que o usuário quer realizar
+     */
+    static function getPermissao($tipoAcao) {
+        $dadosusuario = PrincipalController::getDadosUsuario();
+        $vinculo = $dadosUsuario->vinculo;
+        $permissao = false;
+
+        foreach ( (array)$vinculo as $key=>$valor ) {
+            if ($key == "tipoVinculo") {
+                //Busca Permissao pelo tipo de ação
+                $permissao = true;
+
+                /*foreach ($arrUsuariosPermitidos as $user) {
+                    if ( !isset($permissao[$ind])) break;
+        
+                    if (substr_compare($user,$permissao[$ind]) == 0) {
+                        $auth = true;
+                        break;
+                    }
+                    $ind++;
+                }*/
+            }
+        }
+        return $permissao;       
+
     }
 }
