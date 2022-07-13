@@ -28,7 +28,7 @@ class AlunosController extends Controller
 
         /*if (!$this->usuarioLogado->vinculo->tipoVinculo == "ALUNOGR") {
             unset($_COOKIE["loginUSP"]);
-            print "<script>alert('Favor realizar login'); window.location.assign('http://localhost:8000'); </script>";
+            print "<script>alert('Favor realizar login'); window.location.assign('" . env('APP_URL') . "'); </script>";
 			return;
         }*/
 
