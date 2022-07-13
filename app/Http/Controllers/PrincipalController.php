@@ -90,7 +90,7 @@ class PrincipalController extends Controller
         $vinculo = (array)$vinculo;
 
         if (!count($vinculo)) {
-            print "<script>alert('Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
+            print "<script>alert('1-Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
             return;
             /*$dadosVinculo = new StdClass;
             $dadosVinculo->tipoVinculo = "SERVIDOR";
