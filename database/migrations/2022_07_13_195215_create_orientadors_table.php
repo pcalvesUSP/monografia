@@ -20,10 +20,8 @@ class CreateOrientadorsTable extends Migration
             $table->string('nome', 80);
             $table->string('password', 250)->nullable;
             $table->boolean('externo')->default(false);
-            $table->foreignId('monografia_id')->constrained();
             
-            $table->primary('id');
-            $table->index(['id', 'monografia_id'])->unique();            
+            $table->primary('id');            
         });
     }
 

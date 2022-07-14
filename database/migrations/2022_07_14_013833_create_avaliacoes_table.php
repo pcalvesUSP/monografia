@@ -14,14 +14,13 @@ class CreateAvaliacoesTable extends Migration
     public function up()
     {
         Schema::create('avaliacoes', function (Blueprint $table) {
-            $table->foreignId('id_aluno')->constrained();
-            $table->foreignId('id_orientador')->constrained();
-            $table->foreignId('id_monografia')->constrained();
-            $table->dateTime('dataParecer',0);
+            $table->foreignId('orientador_id');
+            $table->foreignId('monografia_id');
+            $table->dateTime('dataParecer', 0);
             $table->text('parecer');
             $table->timestamps();
 
-            $table->primary(['id_aluno', 'id_orientador', 'id_monografia', 'dataParecer']);
+            $table->primary(['orientador_id', 'monografia_id', 'dataParecer']);
         });
     }
 
@@ -32,6 +31,10 @@ class CreateAvaliacoesTable extends Migration
      */
     public function down()
     {
+        /*Schema::table('orient_monografia', function (Blueprint $table) {
+            $table->dropForeign('avaliacoes_orientador_id_foreign');
+            $table->dropForeign('avaliacoes_monografia_id_foreign');
+        });*/
         Schema::dropIfExists('avaliacoes');
     }
 }

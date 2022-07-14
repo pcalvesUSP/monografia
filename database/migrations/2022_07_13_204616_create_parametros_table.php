@@ -14,7 +14,7 @@ class CreateParametrosTable extends Migration
     public function up()
     {
         Schema::create('parametros', function (Blueprint $table) {
-            $table->int('ano');
+            $table->integer('ano');
             $table->timestamps();
 
             $table->date('dataInicioCadastro');

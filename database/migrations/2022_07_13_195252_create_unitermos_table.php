@@ -24,14 +24,6 @@ class CreateUnitermosTable extends Migration
             $table->foreignId('unitermo2')->constrained('unitermos');
             $table->foreignId('unitermo3')->constrained('unitermos');
             
-            /*$table->bigInteger('unitermo1');
-            $table->bigInteger('unitermo2');
-            $table->bigInteger('unitermo3');
-
-            $table->foreign('unitermo1')->references('id')->on('unitermos');
-            $table->foreign('unitermo2')->references('id')->on('unitermos');
-            $table->foreign('unitermo3')->references('id')->on('unitermos');*/
-
         });
 
         
@@ -44,10 +36,16 @@ class CreateUnitermosTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        
         Schema::table('monografias', function (Blueprint $table) {
-            $table->dropForeign('unitermo1');
-            $table->dropForeign('unitermo2');
-            $table->dropForeign('unitermo3');
+            $table->dropForeign('monografias_unitermo1_foreign');
+            $table->dropForeign('monografias_unitermo2_foreign');
+            $table->dropForeign('monografias_unitermo3_foreign');
+
+            $table->dropColumn('unitermo1');
+            $table->dropColumn('unitermo2');
+            $table->dropColumn('unitermo3');
         });
         
         Schema::dropIfExists('unitermos');
