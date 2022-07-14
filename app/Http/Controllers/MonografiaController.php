@@ -6,13 +6,11 @@ use Illuminate\Http\Request;
 
 class MonografiaController extends Controller
 {
-    
-    
     /** 
      * Método que chama o cadastro do TCC
-     * @param numUSP número USP do aluno
+     * @var $numUSP número USP do aluno
      */
-    function cadastroTcc($numUSP) {
+    function cadastroMonografia($numUSP) {
 
         $auth = PrincipalController::getPermissao("CADASTRO_TCC");
 

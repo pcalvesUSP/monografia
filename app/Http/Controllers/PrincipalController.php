@@ -159,4 +159,14 @@ class PrincipalController extends Controller
         return $permissao;       
 
     }
+
+    /**
+     * Método Logout
+     * 
+     */
+    function logout() {
+        unset($_COOKIE["loginUSP"]);
+        print "<script>window.location.assign('".route('home').");  </script>";
+        return;
+}
 }

@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-Route::get('/', 'PrincipalController@login')->name('login');
+Route::get('/', 'PrincipalController@login')->name('home');
+Route::get('/login', 'PrincipalController@login')->name('login');
+Route::get('/logout', 'PrincipalController@logout')->name('logout');
 
 Route::get('/graduacao', function() {
     echo "área da graduação";
@@ -28,5 +30,5 @@ Route::get('/orientadores', function() {
 })->name='orientadores';
 
 Route::prefix('alunos')->group(function() {
-    Route::get('/cadastroTcc/{numUSP}', 'AlunosController@cadastroTcc')->name('alunos.cadastroTcc');
+    Route::get('/cadastroMonografia/{numUSP}', 'MonografiaController@cadastroMonografia')->name('alunos.cadastroTcc');
 });
