@@ -14,13 +14,13 @@ class CreateAlunosTable extends Migration
     public function up()
     {
         Schema::create('alunos', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->unsignedBigInteger('id');
             $table->timestamps();
             $table->string('nome', 80);
             $table->foreignId('monografia_id')->constrained();
             
             $table->primary('id');
-            $table->index(['id', 'monografia_id'])->unique();
+            $table->unique(['id', 'monografia_id']);
         });
     }
 

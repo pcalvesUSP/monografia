@@ -15,10 +15,10 @@ class CreateOrientadorsTable extends Migration
     {
         //DB_PASSWORD=#EDjgtb!111
         Schema::create('orientadors', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->unsignedBigInteger('id');
             $table->timestamps();
             $table->string('nome', 80);
-            $table->string('password', 250)->nullable;
+            $table->string('password', 250)->nullable();
             $table->boolean('externo')->default(false);
             
             $table->primary('id');            

@@ -14,8 +14,8 @@ class CreateAvaliacoesTable extends Migration
     public function up()
     {
         Schema::create('avaliacoes', function (Blueprint $table) {
-            $table->foreignId('orientador_id');
-            $table->foreignId('monografia_id');
+            $table->foreignId('orientador_id')->constrained('orientadors');
+            $table->foreignId('monografia_id')->constrained('monografias');
             $table->dateTime('dataParecer', 0);
             $table->text('parecer');
             $table->timestamps();
@@ -31,6 +31,8 @@ class CreateAvaliacoesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         /*Schema::table('orient_monografia', function (Blueprint $table) {
             $table->dropForeign('avaliacoes_orientador_id_foreign');
             $table->dropForeign('avaliacoes_monografia_id_foreign');

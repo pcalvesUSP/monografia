@@ -40,6 +40,8 @@ class PrincipalController extends Controller
             $auth = new Senhaunica();
             $res = $auth->login();
 
+            $this->dadosUsuario = json_encode($res);
+
             setcookie("loginUSP", json_encode($res), time()+3600);
 
         } 
@@ -84,11 +86,23 @@ class PrincipalController extends Controller
 
         }
         
+              
         //$usuario = json_decode($dadosUsuario);
         $usuario = $this->dadosUsuario;
+
+        print_r($usuario);
+        echo "<br/>---------------------- <br/>";
+        echo $usuario->loginUsuario."<br/>";
                 
         $vinculo = isset($usuario->vinculo)?$usuario->vinculo:null;
         
+        print_r($vinculo);
+        echo "<br/>---------------------- <br/>";
+
+        print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
+        return;
+        //return redirect()->route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario]);
+
         if (empty($vinculo)) {
             print "<script>alert('1-Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
             return;
@@ -136,11 +150,11 @@ class PrincipalController extends Controller
      * @param $tipoAcao Ação que o usuário quer realizar
      */
     static function getPermissao($tipoAcao) {
-        $dadosusuario = PrincipalController::getDadosUsuario();
+        $dadosUsuario = PrincipalController::getDadosUsuario();
         $vinculo = $dadosUsuario->vinculo;
         $permissao = false;
 
-        foreach ( (array)$vinculo as $key=>$valor ) {
+        foreach ( $vinculo as $key=>$valor ) {
             if ($key == "tipoVinculo") {
                 //Busca Permissao pelo tipo de ação
                 $permissao = true;

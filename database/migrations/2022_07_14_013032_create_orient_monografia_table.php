@@ -14,12 +14,12 @@ class CreateOrientMonografiaTable extends Migration
     public function up()
     {
         Schema::create('orient_monografia', function (Blueprint $table) {
-            $table->foreignId('orientador_id');
-            $table->foreignId('monografia_id');
+            $table->foreignId('orientador_id')->constrained('orientadors');
+            $table->foreignId('monografia_id')->constrained('monografias');
   
             $table->timestamps();
 
-            $table->primary(['orientador_id', 'monografia_id']);
+            $table->unique(['orientador_id', 'monografia_id']);
 
         });
     }
@@ -32,7 +32,6 @@ class CreateOrientMonografiaTable extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-
         Schema::dropIfExists('orient_monografia');
     }
 }

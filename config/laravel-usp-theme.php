@@ -1,5 +1,7 @@
 <?php
 
+$usuario = App\Http\Controllers\PrincipalController::getDadosUsuario();
+
 $admin = [
     [
         'text' => '<i class="fas fa-atom"></i>  SubItem 1',
@@ -25,8 +27,9 @@ $admin = [
 
 $submenu2 = [
     [
-        'text' => 'SubItem 1',
-        'url' => 'subitem1',
+        'text' => 'Cadastro TCC',
+        'url' => '/cadastroMonografia/'. $usuario->loginUsuario,
+        //'can' => 'ALUNOGR'
     ],
     [
         'text' => 'SubItem 2',
@@ -45,9 +48,9 @@ $menu = [
         'key' => 'menu_dinamico',
     ],
     [
-        'text' => 'Drop Down',
+        'text' => 'Menu Alunos',
         'submenu' => $submenu2,
-        'can' => '',
+        //'can' => 'user',
     ],
     [
         'text' => 'Está logado',
@@ -67,7 +70,7 @@ $menu = [
 ];
 
 $right_menu = [
-    [
+    /*[
         // menu utilizado para views da biblioteca senhaunica-socialite.
         'key' => 'senhaunica-socialite',
     ],
@@ -77,7 +80,7 @@ $right_menu = [
         'target' => '_blank',
         'url' => config('app.url') . '/item1',
         'align' => 'right',
-    ],
+    ],*/
 ];
 
 

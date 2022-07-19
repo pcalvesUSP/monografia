@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 
 class MonografiaController extends Controller
 {
+
+    private $usuarioLogado;
+
+    function __construct() {
+        $this->usuarioLogado = PrincipalController::getDadosUsuario();
+    }
+
     /** 
      * Método que chama o cadastro do TCC
      * @var $numUSP número USP do aluno
@@ -14,13 +21,14 @@ class MonografiaController extends Controller
 
         $auth = PrincipalController::getPermissao("CADASTRO_TCC");
 
-        var_dump($auth);
+        if (ENV("APP_ENV") != "production") 
+            var_dump($auth);
 
-        /*if (!$auth) {
+        if (!$auth) {
             unset($_COOKIE["loginUSP"]);
             print "<script>alert('Favor realizar login'); window.location.assign('" . env('APP_URL') . "'); </script>";
 			return;
-        }*/
+        }
 
         $parametros = ["numUSP" => $numUSP
                       ,"nomeUsuario" => $this->usuarioLogado->nomeUsuario];

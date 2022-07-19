@@ -1,21 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
+  <style>
+    input, select, textarea {
+      border-style: solid;
+      border-color: blue;
+      font-family: sans-serif;
+      position: relative;
+      left: 10px;
+    }
+  </style>
+
   <h1>Cadastro de Monografia - Graduação</h1>
   <p>{{ $numUSP }} - {{ $nomeUsuario }}</p>
   <form>
-    Trabalho em Dupla? <input type="checkbox" name="dupla">
-    <div id="trabDupla">
-      Selecione a pessoa: <br/>
+    Trabalho em Dupla? <input type="checkbox" name="dupla"><br/>
+    <div id="trabDupla" style="display:none">
+      Selecione a pessoa:
       <select name="pessoaDupla">
         <option value="1">Pessoa 1 - NUSP 000000</option>
         <option value="2">Pessoa 2 - NUSP 000000</option>
         <option value="3">Pessoa 3 - NUSP 000000</option>
         <option value="4">Pessoa 4 - NUSP 000000</option>
-      </select><br/>
+      </select>
     </div>
-
-    Selecione o orientador: <br/>
+    <br/>
+    Selecione o orientador:
     <select name="orientador_id">
       <option value="1">Orientador 1 - NUSP 000000</option>
       <option value="2">Orientador 2 - NUSP 000000</option>
@@ -23,7 +33,7 @@
       <option value="4">Orientador 4 - NUSP 000000</option>
     </select><br/>
 
-    T&iacute;tulo: <input type="text" name="titulo" maxlength="255" required><br/>
+    <label> T&iacute;tulo: </label><input type="text" name="titulo" maxlength="255" required><br/>
     Resumo: <textarea name="resumo" rows="10" cols="50" required></textarea><br/>
     Arquivo do TCC: <input type="file" name="template_apres" required><br/>
     Unitermo 1: <select name="unitermo1">
