@@ -30,5 +30,5 @@ Route::get('/orientadores', function() {
 })->name='orientadores';
 
 Route::prefix('alunos')->group(function() {
-    Route::get('/cadastroMonografia/{numUSP}', 'MonografiaController@cadastroMonografia')->name('alunos.cadastroTcc');
+    Route::get('/cadastroMonografia/{numUSP?}', 'MonografiaController@cadastroMonografia')->name('alunos.cadastroTcc');
 });

@@ -91,6 +91,28 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'replicado' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL_REPLICADO'),
+            'host' => env('DB_HOST_REPLICADO', 'localhost'),
+            'port' => env('DB_PORT_REPLICADO', '1433'),
+            'database' => env('DB_DATABASE_REPLICADO', 'forge'),
+            'username' => env('DB_USERNAME_REPLICADO', 'forge'),
+            'password' => env('DB_PASSWORD_REPLICADO', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
+        'odbc-connection-replicado' => [
+            'driver' => 'odbc',
+            'dsn' => 'EEBASE',
+            'database' => env('DB_DATABASE_REPLICADO', 'forge'),
+            'host' => env('DB_HOST_REPLICADO', 'localhost'),
+            'username' => env('DB_USERNAME_REPLICADO', 'forge'),
+            'password' => env('DB_PASSWORD_REPLICADO', '')
+        ]
+
     ],
 
     /*

@@ -20,8 +20,11 @@ class PrincipalController extends Controller
     }
 
     static function getDadosUsuario() {
-        $user = isset($_COOKIE["loginUSP"])? $_COOKIE["loginUSP"]:null;
-        return json_decode($user);
+        $user = isset($_COOKIE["loginUSP"])? json_decode($_COOKIE["loginUSP"]):null;
+        if (!empty($user))
+            return (object)$user;
+        else 
+            return null;
     }
 
     /**
@@ -38,11 +41,9 @@ class PrincipalController extends Controller
             //putenv('SENHAUNICA_DEV=teste123*');
 
             $auth = new Senhaunica();
-            $res = $auth->login();
+            $this->dadosUsuario = (object)$auth->login();
 
-            $this->dadosUsuario = json_encode($res);
-
-            setcookie("loginUSP", json_encode($res), time()+3600);
+            setcookie("loginUSP", json_encode($this->dadosUsuario), time()+3600);
 
         } 
         $this->accSystem();
@@ -51,53 +52,50 @@ class PrincipalController extends Controller
     function loginExternal () {
         
         if (empty($this->dadosUsuario)) {
-            $result = array("loginUsuario"            => "26790587802"
-                           ,"nomeUsuario"             => "Nome Usuário"
-                           ,"tipoUsuario"             => "E"
-                           ,"emailPrincipalUsuario"   => "emailprincipal@xpto.com.br"
-                           ,"emailAlternativoUsuario" => ""
-                           ,"emailUspUsuario"         => ""
-                           ,"numeroTelefoneFormatado" => "(11) 55555-5555"
-                           ,"wuserid"                 => 0
-                           ,"vinculo"                 => [0 => array("tipoVinculo"        => "EXTERNO"
-                                                                    ,"codigoSetor"        => "0"
-                                                                    ,"nomeAbreviadoSetor" => "Prof. Ext"
-                                                                    ,"nomeSetor"          => "Externo"
-                                                                    ,"codigoUnidade"      => 7
-                                                                    ,"siglaUnidade"       => "EE"
-                                                                    ,"nomeUnidade"        => "Escola de Enfermagem"
-                                                                    ,"nomeVinculo"        => "Externo"
-                                                                    ,"nomeAbreviadoFuncao"=> "Orientador"
-                                                                    ,"tipoFuncao"         => "Docente"
-                                                         )]
-                      );
+            $result = new StdClass;
+            $vinculo = new StdClass;
 
+            $vinculo->tipoVinculo = "EXTERNO";
+            $vinculo->codigoSetor = 0;
+            $vinculo->nomeAbreviadoSetor = "Prof. Ext";
+            $vinculo->nomeSetor = "Externo";
+            $vinculo->codigoUnidade = 7;
+            $vinculo->siglaUnidade = "EE";
+            $vinculo->nomeUnidade = "Escola de Enfermagem";
+            $vinculo->nomeVinculo = "Externo";
+            $vunculo->nomeAbreviadoFuncao = "ORIENTADOR";
+            $vinculo->tipoFuncao = "Docente";
+
+            $result->loginUsuario = "26790587802";
+            $result->nomeUsuario = "Nome Usuário";
+            $result->tipoUsuario = "E";
+            $result->emailPrincipalUsuario = "emailprincipal@xpto.com.br";
+            $result->emailAlternativoUsuario = "";
+            $result->emailUspUsuario = "";
+            $result->numeroTelefoneFormatado = "(11) 55555-5555";
+            $result->wuserid = "";
+            $result->vinculo = [0 => $vinculo];
+
+            $this->dadosUsuarios = $result;
             setcookie("loginUSP",json_encode($result),time()+3600,"/");
         }
         $this->accSystem();
     }
 
     function accSystem () {
-        if (empty($this->dadosUsuario)) {
-            $this->dadosUsuario = isset($_COOKIE["loginUSP"])?$_COOKIE["loginUSP"]:null;
-        
-            //print "<script>alert('Favor realizar login'); window.location.assign('http://www.ee.usp.br'); </script>";
-			//return;
-
-        }
-        
               
-        //$usuario = json_decode($dadosUsuario);
         $usuario = $this->dadosUsuario;
 
-        print_r($usuario);
-        echo "<br/>---------------------- <br/>";
-        echo $usuario->loginUsuario."<br/>";
-                
-        $vinculo = isset($usuario->vinculo)?$usuario->vinculo:null;
-        
-        print_r($vinculo);
-        echo "<br/>---------------------- <br/>";
+        if (ENV("APP_ENV") != "production") {
+            print_r($usuario);
+            echo "<br/>---------------------- <br/>";
+            echo $usuario->loginUsuario."<br/>";
+                    
+            $vinculo = isset($usuario->vinculo)?$usuario->vinculo:null;
+            
+            print_r($vinculo);
+            echo "<br/>---------------------- <br/>";
+        }
 
         print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
         return;
@@ -151,6 +149,10 @@ class PrincipalController extends Controller
      */
     static function getPermissao($tipoAcao) {
         $dadosUsuario = PrincipalController::getDadosUsuario();
+        if (empty($dadosUsuario)) {
+            print "<script>alert('PGP - Favor realizar login.'); window.location.assign('" . env('APP_URL') . "'); </script>";
+			return;
+        }
         $vinculo = $dadosUsuario->vinculo;
         $permissao = false;
 

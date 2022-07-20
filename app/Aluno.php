@@ -38,10 +38,11 @@ class Aluno extends Model
      * Método para pegar os dados de Alunos na tabela do replicado
      * 
      */
-    static function getDadosAluno($id) {
+    static function getDadosAluno(int $codpes = 0) {
         //Buscar no banco de dados replicado
         $replicado = new Replicado;
-
-        return $replicado->getDadosPessoas($id);
+        
+        return $replicado->getDadosPessoas($codpes,"ALUNOGR");
+        
     }
 }

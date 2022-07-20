@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Monografia extends Model
 {
+    protected $connection = 'mysql';
+    
     private int $idTcc;
     private string $status;
     private string $titulo;
