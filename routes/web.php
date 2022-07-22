@@ -21,14 +21,17 @@ Route::get('/', 'PrincipalController@login')->name('home');
 Route::get('/login', 'PrincipalController@login')->name('login');
 Route::get('/logout', 'PrincipalController@logout')->name('logout');
 
+Route::post('salvarMonografia',"MonografiaController@salvar")->name('salvarMonografia');
+
 Route::get('/graduacao', function() {
     echo "área da graduação";
 })->name('graduacao');
 
-Route::get('/orientadores', function() {
-    echo "área dos orientadores";
-})->name='orientadores';
+Route::prefix('orientador')->group(function() {
+    Route::get('/', 'OrientadorController@index')->name('orientador.index');
+    Route::get('/edicao/{idMono}/{numUsp}', 'OrientadorController@edicaoMonografia')->name('orientador.edicao');
+});
 
 Route::prefix('alunos')->group(function() {
-    Route::get('/cadastroMonografia/{numUSP?}', 'MonografiaController@cadastroMonografia')->name('alunos.cadastroTcc');
+    Route::get('/cadastroMonografia', 'AlunosController@index')->name('alunos.index');
 });

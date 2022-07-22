@@ -16,6 +16,7 @@ class CreateOrientMonografiaTable extends Migration
         Schema::create('orient_monografia', function (Blueprint $table) {
             $table->foreignId('orientador_id')->constrained('orientadors');
             $table->foreignId('monografia_id')->constrained('monografias');
+            $table->boolean('principal')->default(false);
   
             $table->timestamps();
 

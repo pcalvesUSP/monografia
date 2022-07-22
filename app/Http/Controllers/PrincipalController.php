@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Uspdev\Senhaunica\Senhaunica;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cookie;
 
+use App\Aluno;
+use App\Orientador;
 
 class PrincipalController extends Controller
 {
@@ -20,7 +23,7 @@ class PrincipalController extends Controller
     }
 
     static function getDadosUsuario() {
-        $user = isset($_COOKIE["loginUSP"])? json_decode($_COOKIE["loginUSP"]):null;
+        $user = isset($_COOKIE['loginUSP'])? json_decode($_COOKIE['loginUSP']):null;
         if (!empty($user))
             return (object)$user;
         else 
@@ -44,7 +47,6 @@ class PrincipalController extends Controller
             $this->dadosUsuario = (object)$auth->login();
 
             setcookie("loginUSP", json_encode($this->dadosUsuario), time()+3600);
-
         } 
         $this->accSystem();
     }
@@ -85,21 +87,21 @@ class PrincipalController extends Controller
     function accSystem () {
               
         $usuario = $this->dadosUsuario;
+        $vinculo = isset($usuario->vinculo)?$usuario->vinculo:null;
+            
+        echo "<h1> AGUARDE </h1>";
 
         if (ENV("APP_ENV") != "production") {
             print_r($usuario);
             echo "<br/>---------------------- <br/>";
-            echo $usuario->loginUsuario."<br/>";
-                    
-            $vinculo = isset($usuario->vinculo)?$usuario->vinculo:null;
+            echo $usuario->loginUsuario."<br/>";        
             
             print_r($vinculo);
             echo "<br/>---------------------- <br/>";
-        }
+        } 
 
-        print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
-        return;
-        //return redirect()->route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario]);
+        //print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
+        //return;
 
         if (empty($vinculo)) {
             print "<script>alert('1-Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
@@ -111,35 +113,26 @@ class PrincipalController extends Controller
             $vinculo[] = $dadosVinculo;*/
         }
     
-        foreach ( (array)$vinculo as $valor ) {
+        foreach ( $vinculo as $valor ) {
+            $valor = (object)$valor;
             
-            print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
-            return;
-            
-            // NÃO FUNCIONA - PESQUISAR: redirect()->route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario]);
-            //return;
-
-            if ( $valor['tipoVinculo'] == "ALUNOGR" && $valor['codigoUnidade'] == 7 ) {
-                print "<script>window.location.assign('".route('alunos.cadastroTcc',['numUSP' => $usuario->loginUsuario])."');  </script>";
-                return;
+            if ($valor->tipoVinculo == "ALUNOGR") {
+                if (Aluno::where("id",$usuario->loginUsuario)->count() > 0) {
+                    print "<script>window.location.assign('".route('alunos.index')."');  </script>";
+                    return;
+                }
+            } elseif (Orientador::where("id",$usuario->loginUsuario)->count() > 0) {
+                print "<script>window.location.assign('".route('orientador.index')."');  </script>";
+                return redirect()->route('orientador.index');
             } else {
-                /*$query= $this->db->query("SELECT * FROM orientadores where id_orientador = ".$usuario->loginUsuario); // VERIFICA ORIENTADOR
-                $results_array = $query->result();
-
-                if (!empty($results_array)) { 
-                    redirect()->route('orientadores');
+                $dadosGraduacao = explode(",", env('NUSP_GRADUACAO'));
+                if (array_search($usuario->loginUsuario,$dadosGraduacao)  === false){
+                   $this->logout();
                 } else {
-                    $query= $this->db->query("SELECT * FROM comissao where num_usp =". $usuario->loginUsuario);// VERIFICA GRADUAÇÃO
-                    $results_array = $query->result();
-                        
-                    if (!empty($results_array)) redirect()->route('graduacao');
-                };*/
+                    print "<script>window.location.assign('".route('orientador.index')."');  </script>";
+                    return redirect()->route('orientador.index');
+                }
             }
-        }
-        
-        if (empty($results_array)) {
-            print "<script>alert('Você não tem acesso ao sistema. Entre em contato com o Serviço de Graduacao.');  </script>";
-            return;
         }
     }
 
@@ -147,42 +140,46 @@ class PrincipalController extends Controller
      * Método que busca as permissões de alunos
      * @param $tipoAcao Ação que o usuário quer realizar
      */
-    static function getPermissao($tipoAcao) {
+    static function getPermissao() {
         $dadosUsuario = PrincipalController::getDadosUsuario();
         if (empty($dadosUsuario)) {
             print "<script>alert('PGP - Favor realizar login.'); window.location.assign('" . env('APP_URL') . "'); </script>";
 			return;
         }
+               
+        session()->pull('permissao', false);
+
         $vinculo = $dadosUsuario->vinculo;
         $permissao = false;
 
         foreach ( $vinculo as $key=>$valor ) {
-            if ($key == "tipoVinculo") {
-                //Busca Permissao pelo tipo de ação
-                $permissao = true;
+            if ($valor->tipoVinculo == "ALUNOGR") {
+                session(['permissao' => "CADASTRO_TCC, CORRIGIR_TCC,"]);
+            } elseif (Orientador::where("id",$dadosUsuario->loginUsuario)->count() > 0) {
+                session(['permissao' => "DEVOLVER_TCC, APROVAR_TCC, REPROVAR_TCC,"]);
+            } else {
+                $dadosGraduacao = explode(",", env('NUSP_GRADUACAO'));
+                if (array_search($dadosUsuario->loginUsuario,$dadosGraduacao)  !== false ){
+                    session(['permissao' => "EDITAR_TCC, DEVOLVER_TCC, APROVAR_TCC, REPROVAR_TCC,"]);
+                }
+            }
 
-                /*foreach ($arrUsuariosPermitidos as $user) {
-                    if ( !isset($permissao[$ind])) break;
-        
-                    if (substr_compare($user,$permissao[$ind]) == 0) {
-                        $auth = true;
-                        break;
-                    }
-                    $ind++;
-                }*/
+            if (session('permissao')) {
+                $permissao = true;
+                break;
             }
         }
-        return $permissao;       
-
+        return $permissao;
     }
 
     /**
      * Método Logout
      * 
      */
-    function logout() {
-        unset($_COOKIE["loginUSP"]);
-        print "<script>window.location.assign('".route('home').");  </script>";
-        return;
-}
+    static function logout() {
+        unset($_COOKIE['loginUSP']);
+        return redirect()->route('home');
+        //print "<script>window.location.assign('".route('home').");  </script>";
+        //return;
+    }
 }

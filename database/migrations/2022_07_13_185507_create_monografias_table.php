@@ -16,6 +16,7 @@ class CreateMonografiasTable extends Migration
         Schema::create('monografias', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->boolen('dupla')->default(false);
             $table->enum('status', ['EM ANDAMENTO', 'CONCLUIDO'])->default("EM ANDAMENTO");
             $table->text('titulo');
             $table->text('resumo');

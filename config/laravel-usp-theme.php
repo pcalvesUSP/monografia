@@ -1,6 +1,6 @@
 <?php
 
-$usuario = App\Http\Controllers\PrincipalController::getDadosUsuario();
+//$usuario = App\Http\Controllers\PrincipalController::getDadosUsuario();
 
 $admin = [
     [
