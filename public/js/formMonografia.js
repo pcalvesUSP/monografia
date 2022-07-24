@@ -1,5 +1,10 @@
 $(document).ready(function(){
+    
     $("#trabDupla").hide();
+
+    if ($("#dupla").is(':checked')) {
+        $("#trabDupla").show();
+    } 
 
     $("#dupla").click (function() {
         result = false;

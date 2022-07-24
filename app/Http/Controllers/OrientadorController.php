@@ -10,8 +10,14 @@ class OrientadorController extends Controller
     function __construct() {
         $this->usuarioLogado = PrincipalController::getDadosUsuario();
         if (empty($this->usuarioLogado)) {
-            print "<script>alert('O1-Favor realizar login'); window.location.assign('" . env('APP_URL') . "'); </script>";
-			return;
+            return PrincipalController::logout('O1-Favor realizar login');
+        }
+
+        if ($this->usuarioLogado->permissao && 
+            ($this->usuarioLogado->vinculo[0]->tipoFuncao != "ORIENTADOR" ||
+            $this->usuarioLogado->vinculo[0]->tipoFuncao != "SUPER") ) {
+
+            return PrincipalController::logout('O2-Usuário sem acesso a esta parte do sistema');
         }
     }
     

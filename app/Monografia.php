@@ -44,8 +44,9 @@ class Monografia extends Model
                          ) 
                  ->join("orient_monografia as om","om.monografia_id", "=" ,"monografias.id")
                  ->join("orientadors as o","o.id", "=", "om.orientador_id")
-                 ->join("alunos","alunos.monografia_id","=","monografias.id");
-        
+                 ->join("alunos","alunos.monografia_id","=","monografias.id")
+                 ->where("status","EM ANDAMENTO");
+
         if ($id > 0)
             $build->where("monografias.id", $id);
 
@@ -62,7 +63,7 @@ class Monografia extends Model
 
             $build->whereIn('monografias.id', $arrArg);
         }
-    $build->orderBy("monografias.ano")->orderBy("alunos.nome");
+        $build->orderBy("monografias.ano")->orderBy("alunos.nome");
         
         $listMonografia = $build->get();
         

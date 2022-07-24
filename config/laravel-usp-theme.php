@@ -1,8 +1,8 @@
 <?php
 
-//$usuario = App\Http\Controllers\PrincipalController::getDadosUsuario();
+//$usuario = \App\Http\Controllers\PrincipalController::getDadosUsuario();
 
-$admin = [
+/*$admin = [
     [
         'text' => '<i class="fas fa-atom"></i>  SubItem 1',
         'url' => 'subitem1',
@@ -17,55 +17,73 @@ $admin = [
     ],
     [
         'type' => 'header',
-        'text' => 'Cabeçalho',
+        'text' => 'TESTE',
     ],
     [
         'text' => 'SubItem 3',
         'url' => 'subitem3',
     ],
-];
+];*/
 
-$submenu2 = [
+$alunos = [
     [
-        'text' => 'Cadastro TCC',
-        'url' => '/cadastroMonografia/'. $usuario->loginUsuario,
+        'text' => 'Cadastro Monografia',
+        'url' => '/alunos/cadastroMonografia/',
         //'can' => 'ALUNOGR'
     ],
-    [
+    /*[
         'text' => 'SubItem 2',
         'url' => 'subitem2',
         'can' => 'admin',
+    ],*/
+];
+
+$orientadores = [
+    [
+        'text' => 'Listar Monografias',
+        'url' => '/orientador/',
+        //'can' => 'ALUNOGR'
     ],
 ];
+
+$graduacao = [
+    [
+        'text' => 'Listar Monografias',
+        'url' => '/orientador/',
+        //'can' => 'ALUNOGR'
+    ],
+];
+
 
 $menu = [
     [
         'text' => '<i class="fas fa-home"></i> Home',
         'url' => '/',
     ],
-    [
+    /*[
         # este item de menu será substituido no momento da renderização
         'key' => 'menu_dinamico',
-    ],
+    ],*/
     [
-        'text' => 'Menu Alunos',
-        'submenu' => $submenu2,
+        'text' => 'Alunos',
+        'submenu' => $alunos,
         //'can' => 'user',
     ],
-    [
+    /*[
         'text' => 'Está logado',
         'url' => config('app.url') . '/logado', // com caminho absoluto
         'can' => 'user',
+    ],*/
+    [
+        'text' => 'Orientadores',
+        'submenu' => $orientadores
+        //'url' => 'gerente',
+        //'can' => 'gerente',
     ],
     [
-        'text' => 'Menu gerente',
-        'url' => 'gerente',
-        'can' => 'gerente',
-    ],
-    [
-        'text' => 'Menu admin',
-        'submenu' => $admin,
-        'can' => 'admin',
+        'text' => 'Graduação',
+        'submenu' => $graduacao
+        //'can' => 'admin',
     ],
 ];
 
@@ -100,11 +118,11 @@ return [
     'app_url' => config('app.url'),
 
     # login e logout
-    'logout_method' => 'POST',
+    'logout_method' => 'GET',
     'logout_url' => 'logout',
     'login_url' => 'login',
 
     # menus
     'menu' => $menu,
-    'right_menu' => $right_menu,
+    //'right_menu' => $right_menu,
 ];

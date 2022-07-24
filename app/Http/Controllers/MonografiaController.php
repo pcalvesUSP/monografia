@@ -15,35 +15,30 @@ use App\OrientMonografia;
 
 class MonografiaController extends Controller
 {
-
     private $usuarioLogado;
 
     function __construct() {
         $this->usuarioLogado = PrincipalController::getDadosUsuario();
         if (empty($this->usuarioLogado)) {
-            print "<script>alert('M1-Favor realizar login'); window.location.assign('" . env('APP_URL') . "'); </script>";
-			return;
+            return PrincipalController::logout('M1-Favor realizar login');
+        }
+        
+        $auth = $this->usuarioLogado->permissao;
+        if (!$auth) {
+            return PrincipalController::logout('M2-Usuário não autorizado');
         }
     }
 
     /** 
      * Método que chama o cadastro do TCC
-     * @var $numUSP número USP do aluno
-     * @var $monografia_id Id da Monografia
+     * @param string $numUSP número USP do aluno, caso não informado, busca o usuário logado
+     * @param int $monografia_id Id da Monografia, caso não informada não realiza a busca
      */
     function cadastroMonografia($numUSP = null, $monografia_id = 0) {
-
-        $auth = PrincipalController::getPermissao();
-
-        if (ENV("APP_ENV") != "production")
-            var_dump($auth);
-
-        if (!$auth) {
-            print "<script>alert('M2-Usuário não autorizado'); </script>";
-            PrincipalController::logout();
-        }
-
         $Monografias = new Monografia();
+        $this->usuarioLogado = PrincipalController::getDadosUsuario();
+        
+        dd(session('SSloginUSP'));
 
         $readonly = false;
         $publicar = false;
@@ -72,8 +67,9 @@ class MonografiaController extends Controller
         if ($this->usuarioLogado->vinculo[0]->tipoVinculo == "ALUNOGR" && 
             Aluno::where("id",$this->usuarioLogado->loginUsuario)->count() > 0) 
         {
+           $readonly = true;
            $dadosAlunoMono = Aluno::where("id",$this->usuarioLogado->loginUsuario)->get();
-           $dadosMonografia = $Monografias->getMonografia($dadosAlunoMono->first()->monografia_id);
+           $dadosMonografia = $Monografias->getMonografia($dadosAlunoMono->first('monografia_id'));
 
            foreach ($Monografias->getIdAluno() as $idAluno) {
                 $objAluno = Aluno::find($idAluno);
@@ -89,23 +85,17 @@ class MonografiaController extends Controller
             if ($monografia_id > 0) {
                 $dadosMonografia = $Monografias->getMonografia($monografia_id);
             } else {
-                print "<script>alert('M6-Erro ao selecionar Monografia.');  </script>";
-			    PrincipalController::logout();
-                return;
+                return PrincipalController::logout('M4-Erro ao selecionar Monografia.');
             }
             
             if (Orientador::where("id",$this->usuarioLogado->loginUsuario)->count() > 0 && 
                 array_search($Monografias->getIdOrientador(),$this->usuarioLogado->loginUsuario) === false) 
             {
-                print "<script>alert('M7-Monografia não está sob sua Orientação');  </script>";
-			    PrincipalController::logout();
-                return;    
+                return PrincipalController::logout('M5-Monografia não está sob sua Orientação');
             }
            
             if (!$dadosMonografia) {
-                print "<script>alert('M5-Não constam Monografias com este ID');  </script>";
-			    PrincipalController::logout();
-                return true;
+                return PrincipalController::logout('M3-Não constam Monografias com este ID');
             } else {
                 foreach ($dadosMonografia as $objMono) {
                     $objAluno = Aluno::find($objMono->numUspAluno);

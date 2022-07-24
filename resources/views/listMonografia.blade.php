@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1>TESTE</h1>
+<h1>Lista de Monografias para avaliação</h1>
 <table id="listMonografias" border="1">
     <tr>
         <th>Titulo</th>
